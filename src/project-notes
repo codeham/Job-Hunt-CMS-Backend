@@ -1,0 +1,47 @@
+** Job Hunt CMS Application **
+
+File Structure
+
+>main
+    >java
+        >ApplicationController
+            >CMSController
+                >...
+        >Database
+            >CMSDatabase
+                >...
+
+Database Schema
+
+CREATE TABLE JOB_BOOKMARK(
+	ID SERIAL PRIMARY KEY,
+	COMPANY TEXT NOT NULL,
+	ROLE TEXT NOT NULL,
+	CITY TEXT,
+	STATE TEXT,
+	COUNTRY TEXT,
+	JOB_PLATFORM TEXT NOT NULL,
+	DESCRIPTION TEXT,
+	REQUIREMENTS TEXT,
+    POSTING_DATE DATE NOT NULL DEFAULT CURRENT_DATE,
+	JOB_STATUS TEXT NOT NULL
+);
+
+	Example JSON data
+{
+ 		company: "Snapchat",
+ 		position: "Software Engineer",
+ 		city: "Venice Beach",
+ 		states: "CA",
+ 		country: "United States",
+ 		job-platform: "Indeed",
+ 		description: "Snapchat is the best place to work at !",
+ 		requirments: "4 years of software engineering experience"
+}
+
+** Understand **
+Dependency Injection
+Annotations
+    > @Repository
+    > @Autowired
+    > @Qualifier
