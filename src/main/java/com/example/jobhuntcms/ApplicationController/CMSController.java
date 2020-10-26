@@ -2,6 +2,7 @@ package com.example.jobhuntcms.ApplicationController;
 
 import com.example.jobhuntcms.Database.JobListingRepository;
 import com.example.jobhuntcms.Model.JobListing;
+import com.sun.istack.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,51 +24,22 @@ public class CMSController {
 //        return "index.html";
 //    }
 
-    @PostMapping("/append-job-listing")
+    @PostMapping(value = "/testAPI", consumes = "application/json", produces = "application/json")
     @CrossOrigin
-    public String appendNewJobListing(@RequestParam String company, @RequestParam String position, @RequestParam String city, @RequestParam String state, @RequestParam String country, @RequestParam String platform, @RequestParam String description, @RequestParam String requirements, @RequestParam String jobStatus) {
-        JobListing jobListing = new JobListing();
-        jobListing.setCompany(company);
-        jobListing.setPosition(position);
-        jobListing.setCity(city);
-        jobListing.setState(state);
-        jobListing.setCountry(country);
-        jobListing.setPlatform(platform);
-        jobListing.setDescription(description);
-        jobListing.setRequirements(requirements);
+    public String testAPI(@RequestBody JobListing jobListing){
         jobListing.setPostingDate(getCurrentDate());
-        jobListing.setJobStatus(jobStatus);
+        jobListing.setJobStatus("Applied");
+        System.out.println(jobListing.getCompany());
         jobListingRepository.save(jobListing);
         return "Saved !";
     }
 
-//    @RequestMapping(value = "/append-job-listing", method = RequestMethod.POST)
-//    public String appendNewJobListing(@ModelAttribute("jobListing") JobListing jobListing, Model model){
-//        jobListing.setPostingDate(getCurrentDate());
-//        model.addAttribute("jobListing", jobListing);
-//        jobListingRepository.save(jobListing);
-//        return "Saved !";
-//    }
-
-//    @PostMapping("/append-job-listing")
-//    public String appendNewJobListing(@ModelAttribute("jobListing") JobListing jobListing, Model model){
-//        jobListing.setPostingDate(getCurrentDate());
-//        jobListing.setJobStatus("Applied");
-//        model.addAttribute("jobListing", jobListing);
-//        jobListingRepository.save(jobListing);
-//        return "form_submission_result";
-//    }
-
-//    @GetMapping("/append-job-listing")
-//    public String appendNewJobListingForm(Model model){
-//        model.addAttribute("jobListing", new JobListing());
-//        return "form";
-//    }
-
-//    @GetMapping("/table-results")
-//    public String viewTableResults(){
-//        return "index";
-//    }
+    public String validateEmpty(String word){
+        if(word.length() == 0){
+            return null;
+        }
+        return word;
+    }
 
     private String getCurrentDate(){
         LocalDate date = LocalDate.now();
