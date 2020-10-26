@@ -2,12 +2,9 @@ package com.example.jobhuntcms.ApplicationController;
 
 import com.example.jobhuntcms.Database.JobListingRepository;
 import com.example.jobhuntcms.Model.JobListing;
-import com.sun.istack.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.ModelAttribute;
+
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -24,7 +21,7 @@ public class CMSController {
 //        return "index.html";
 //    }
 
-    @PostMapping(value = "/testAPI", consumes = "application/json", produces = "application/json")
+    @PostMapping(value = "/append-job-listing", consumes = "application/json", produces = "application/json")
     @CrossOrigin
     public String testAPI(@RequestBody JobListing jobListing){
         jobListing.setPostingDate(getCurrentDate());
