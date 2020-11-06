@@ -2,12 +2,15 @@ package com.example.jobhuntcms.ApplicationController;
 
 import com.example.jobhuntcms.Database.JobListingRepository;
 import com.example.jobhuntcms.Model.JobListing;
+import org.hibernate.mapping.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.web.bind.annotation.*;
 
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+
 
 @RestController
 @RequestMapping("/cms-storage")
@@ -30,7 +33,7 @@ public class CMSController {
         jobListingRepository.save(jobListing);
         return "Saved !";
     }
-
+    
     public String validateEmpty(String word){
         if(word.length() == 0){
             return null;
