@@ -4,15 +4,26 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class JobListing {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Integer id;
+
+    @NotNull(message = "Company cannot be null")
+    @NotEmpty(message = "Company cannot be empty")
     private String company;
     private String position;
+
+    @NotNull(message = "City cannot be null")
+    @NotEmpty(message = "City cannot be empty")
     private String city;
+
+    @NotNull(message = "State cannot be null")
+    @NotEmpty(message = "State cannot be empty")
     private String state;
     private String country;
     private String platform;

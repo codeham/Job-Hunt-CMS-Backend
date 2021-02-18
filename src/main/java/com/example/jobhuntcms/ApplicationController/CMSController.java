@@ -2,44 +2,49 @@ package com.example.jobhuntcms.ApplicationController;
 
 import com.example.jobhuntcms.Database.JobListingRepository;
 import com.example.jobhuntcms.Model.JobListing;
-import org.hibernate.mapping.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import java.net.URI;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 
 @RestController
 @RequestMapping("/cms-storage")
+@Validated
 public class CMSController {
+    private JobListingRepository jobListingRepo;
+
     @Autowired
-    private JobListingRepository jobListingRepository;
+    public CMSController(JobListingRepository jobListingRepo){
+        this.jobListingRepo = jobListingRepo;
+    }
 
-//    @RequestMapping("/")
-//    public String index(){
-//        // spit out our website
-//        return "index.html";
-//    }
-
-    @PostMapping(value = "/append-job-listing", consumes = "application/json", produces = "application/json")
+    /**
+     * POST mapping
+     * @param jobListing
+     * @return
+     */
+    @PostMapping("/jobListings")
     @CrossOrigin
-    public String testAPI(@RequestBody JobListing jobListing){
+    ResponseEntity createNewJobListing(@Valid @RequestBody JobListing jobListing){
+        JobListing newJobListing = jobListingRepo.save(jobListing);
         jobListing.setPostingDate(getCurrentDate());
         jobListing.setJobStatus("Applied");
-        System.out.println(jobListing.getCompany());
-        jobListingRepository.save(jobListing);
-        return "Saved !";
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}").buildAndExpand(newJobListing.getId()).toUri();
+
+        return ResponseEntity.created(location).build();
     }
-    
-    public String validateEmpty(String word){
-        if(word.length() == 0){
-            return null;
-        }
-        return word;
-    }
+
 
     private String getCurrentDate(){
         LocalDate date = LocalDate.now();
@@ -48,19 +53,25 @@ public class CMSController {
         return date.format(formatter);
     }
 
-    @GetMapping("/all-job-listings")
+    /**
+     * GET mapping
+     * @return all job listings in DB
+     */
+    @GetMapping("/jobListings")
     @CrossOrigin
-    public @ResponseBody Iterable<JobListing> getMasterTable(){
-        return jobListingRepository.findAll();
+    Iterable<JobListing> getAllJobListings(){
+        return jobListingRepo.findAll();
     }
 
-    @GetMapping("/job-listing")
-    public String getJobListing(){
-        return null;
-    }
+    /**
+     * DELETE mapping
+     * @return
+     */
+    @DeleteMapping("/jobListings/{id}")
+    ResponseEntity deleteJobListing(@PathVariable Integer id){
+        JobListing foundJobListing = jobListingRepo.findById(id).get();
 
-    @DeleteMapping("/job-listing/delete")
-    public String deleteListing(){
-        return null;
+        jobListingRepo.deleteById(foundJobListing.getId());
+        return ResponseEntity.ok().body("Dog successfully deleted !");
     }
 }
