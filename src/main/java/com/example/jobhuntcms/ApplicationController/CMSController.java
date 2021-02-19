@@ -64,6 +64,18 @@ public class CMSController {
     }
 
     /**
+     * GET mapping
+     * by id lookup
+     * @param id
+     * @return
+     */
+    @GetMapping("/jobListings/{id}")
+    ResponseEntity getJobListingById(@PathVariable Integer id){
+        JobListing foundJobListing = jobListingRepo.findById(id).get();
+        return ResponseEntity.ok().body(foundJobListing);
+    }
+
+    /**
      * DELETE mapping
      * @return
      */
